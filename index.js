@@ -4,13 +4,14 @@ const fs = require('fs');
 const obj = JSON.parse(fs.readFileSync('./list.json', 'utf8'));
 
 (async () => {
-    obj.data.forEach(async (id) => {
+    for (let i = 0; i < obj.data.length; i++) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         // デバイス（仮想）の設定
         await page.emulate(iPhone);
         // ナンバリング
         let order = 1;
+        const id = obj.data[i]
         const id_name = id.toString().padStart(3, '0');
         await page.goto(`https://mall-front.finc.com/products/${id}`);
         await page.screenshot({path: `./screenshots/product_${id_name}.png`, fullPage: true});
@@ -37,7 +38,10 @@ const obj = JSON.parse(fs.readFileSync('./list.json', 'utf8'));
                         await page.select('.fmr-bar-select > li > select', `${contextValue}`);
                         await page.waitForSelector('.fmr-bar-select > li > select > option[selected]', {timeout: 3000});
                         // 選択終えたらスクショ
-                        await page.screenshot({path: `./screenshots/product_${id_name}_${order++}.png`, fullPage: true});
+                        await page.screenshot({
+                            path: `./screenshots/product_${id_name}_${order++}.png`,
+                            fullPage: true
+                        });
                     }
                 }
             } catch (e) {
@@ -65,7 +69,7 @@ const obj = JSON.parse(fs.readFileSync('./list.json', 'utf8'));
         }
 
         await browser.close();
-    });
+    }
 
 
 })();
