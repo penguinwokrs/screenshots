@@ -13,7 +13,7 @@ const obj = JSON.parse(fs.readFileSync('./list.json', 'utf8'));
         let order = 1;
         const id = obj.data[i]
         const id_name = id.toString().padStart(3, '0');
-        await page.goto(`https://mall-front.finc.com/products/${id}`);
+        await page.goto(`https://mall.finc.com/products/${id}`);
         await page.screenshot({path: `./screenshots/product_${id_name}.png`, fullPage: true});
 
 
